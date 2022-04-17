@@ -3,6 +3,7 @@ package com.example.myweb.contoller;
 import java.util.List;
 
 import javax.persistence.OrderBy;
+import javax.validation.Valid;
 
 import com.example.myweb.model.Board;
 import com.example.myweb.repository.BoardRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +45,10 @@ public class BoardController {
     }
 
     @PostMapping("/form")
-    public String formSubmit(@ModelAttribute Board board){
+    public String formSubmit(@Valid Board board , BindingResult bindingResult ){
+        if (bindingResult.hasErrors()) {
+            return "board/form";
+		}
         boardRepository.save(board);
         return "redirect:/board/list";
     }
