@@ -1,20 +1,19 @@
 package com.example.myweb.contoller;
 
-import java.util.List;
 
-import javax.persistence.OrderBy;
 import javax.validation.Valid;
 
 import com.example.myweb.model.Board;
 import com.example.myweb.repository.BoardRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,9 +27,13 @@ public class BoardController {
     private BoardRepository boardRepository; 
 
     @GetMapping("/list")
-    public String list(Model model){
-        List<Board> boards = boardRepository.findAll(Sort.by(Sort.Direction.ASC, "seq"));
-        model.addAttribute(("boards"), boards);
+    public String list(Model model, @PageableDefault(size = 2 ) Pageable pageable, 
+                       @RequestParam(required = false, defaultValue = "") String searchText ){
+        // Page <Board> boards = boardRepository.findAll(pageable);
+        Page<Board>boards = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
+        model.addAttribute("boards", boards);
+        model.addAttribute("endPage" , boards.getTotalPages());
+        model.addAttribute("startPage", 1);
         return "board/list";
     }
 
