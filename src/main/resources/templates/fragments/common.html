@@ -21,7 +21,7 @@
 
 <body>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:fragment="menu(menu)">
-    <a class="navbar-brand" href="#">헌혈통합시스템</a>
+    <a class="navbar-brand" href="#" th:href="@{/}">헌혈통합시스템</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
       aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -37,9 +37,9 @@
           <a class="nav-link" href="#" th:href="@{/}">헌혈소식<span class="sr-only"
               th:if="${menu} == 'news'">(current)</span></a>
         </li>
-        <li class="nav-item" th:classappend="${menu} == 'info'? 'active'">
-          <a class="nav-link" href="#" th:href="@{/}">헌혈정보 <span class="sr-only"
-              th:if="${menu} == 'info'">(current)</span></a>
+        <li class="nav-item" th:classappend="${menu} == 'map'? 'active'">
+          <a class="nav-link" href="#" th:href="@{/maps/map}">헌혈정보 <span class="sr-only"
+              th:if="${menu} == 'map'">(current)</span></a>
         </li>
         <li class="nav-item" th:classappend="${menu} == 'resv'? 'active'">
           <a class="nav-link" href="#" th:href="@{/}">헌혈예약 <span class="sr-only"
