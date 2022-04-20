@@ -26,10 +26,10 @@
   </thead>
   <tbody>
     <tr th:each="map : ${maps}">
-        <td th:text="${map.st_area}">지역</td>
-        <td th:text="${map.st_housename}">이름</td>
-        <td th:text="${map.st_address}">위치</td>
-        <td th:text="${map.st_telephone}">연락처</td>
+        <td name="st_area" th:text="${map.st_area}">지역</td>
+        <td name="st_housename" th:text="${map.st_housename}">이름</td>
+        <td name="st_address" th:text="${map.st_address}">위치</td>
+        <td name="st_telephone" th:text="${map.st_telephone}">연락처</td>
       </tr>
   </tbody>
 </table>

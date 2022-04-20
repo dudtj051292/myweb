@@ -1,4 +1,5 @@
 
+
 var map;
 var mapContainer;
 
@@ -11,54 +12,52 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 var geocoder = new kakao.maps.services.Geocoder();
 
-var positions = [
-    {
-		name : '주안센터',
-        content: '인천 남구 석바위로 68 필프라자 201호(주안역 지하8번출구)', 
-    },
-    {
-		name : '부평센터',
-        content: '인천 부평구 광장로 16 부평역사1층 이벤트광장 옆', 
-    },
-    {
-		name : '부천센터',
-        content: '경기 부천시 원미구 부천로 4 경동빌딩 301호(부천역 4번 출구)', 
-    },
-    {
-		name : '상동센터',
-        content: '경기 부천시 원미구 상동로 87 가나베스트타운205호(상동역3번출구)',
-    }
-];
+var houseNames      = document.getElementsByName("st_housename");
+var houseAddreses   = document.getElementsByName("st_address"  );
+var houseTelephones = document.getElementsByName("st_telephone");
+
+var positions = new Array();
+
+for(var i =0; i<houseAddreses.length; i++){
+	positions[i] =
+	{
+		names : houseNames[i].innerHTML,
+		content : houseAddreses[i].innerHTML,
+		telephone : houseTelephones[i].innerHTML
+	}
+}
+var locations = new Array;
 for (var i = 0; i < positions.length; i ++) {
+	console.log(" address Search 전 :"+ positions[i].content);
+
 	geocoder.addressSearch(positions[i].content, function(result, status) {
 		// 정상적으로 검색이 완료됐으면 
 		 if (status === kakao.maps.services.Status.OK) {
-	
-			var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-			
-			// 결과값으로 받은 위치를 마커로 표시합니다
-			var marker = new kakao.maps.Marker({
-				map: map,
-				position: coords
-			});
-	
-			// 인포윈도우로 장소에 대한 설명을 표시합니다
-			var infowindow = new kakao.maps.InfoWindow({
-				content: positions[i].content 
-			});
-			infowindow.open(map, marker);
-	
-			// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-			if(i==0){
-				map.setCenter(coords);
-			}
-		} 
-
+			var coords = new kakao.maps.LatLng(result[0].y, result[0].x);		
+			console.log("coords :"+ result[0]);
+			locations.push(coords);
+		} else{
+			locations.push("");
+		}
 	})
-
-	kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-	kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
 }
+
+positions.push(locations);
+//전체 위치까지 받앗음.. 이제 이 전체 위치에 대해 인포윈도우 생성과 포커싱 해줄것..
+console.log(positions);
+for (var i = 0; i < positions.length-1; i ++) {
+	console.log("i : " + positions[i])
+	if(i==0){
+
+		mapOption ={
+			center : new kakao.maps.LatLng(positions[positions.length-1][0]["La"], positions[positions.length-1][0]["Ma"])
+		}
+	}
+
+}
+
+
+
 // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
 function makeOverListener(map, marker, infowindow) {
     return function() {
